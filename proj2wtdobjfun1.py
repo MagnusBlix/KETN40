@@ -66,6 +66,7 @@ def obj_seg(u,w1,D,print_vals = False):
     z, c, T, Tw, x1, x2 = simulation_seg(u, D)
     
     K1 = 5
+
     
     conv = 1-x1 #conversion along the reactor
     
@@ -97,7 +98,7 @@ x_ub = (D['Tw_ub']-D['Tin'])/D['Tin']
 bnds_seg = [[x_lb,x_ub]]*10
 guess = (x_ub-x_lb)/2*np.ones(10)
 
-w1 = np.linspace(0,1,10)
+w1 = np.linspace(0,1,30)
 
 conv = []
 Tout = []
