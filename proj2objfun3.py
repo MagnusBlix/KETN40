@@ -6,14 +6,6 @@ Created on Wed Sep 20 14:57:36 2023
 @author: linaelmanira
 """
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Sep 20 13:59:09 2023
-
-@author: linaelmanira
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt 
 from scipy.integrate import solve_ivp
@@ -74,9 +66,9 @@ def obj_seg(u,w1,D,print_vals = False):
     z, c, T, Tw, x1, x2 = simulation_seg(u, D)
     
     K2 = 150
-    R = 10000
+    R = 1000
     
-    conv = 1-x1 #conversion along the reactor
+    conv = 1-x1 # conversion along the reactor
     du = 0
     
     for i in range(len(u)-1):
@@ -86,6 +78,7 @@ def obj_seg(u,w1,D,print_vals = False):
     y = K2*x2**2
     
     Q = (1-w1)*conv[-1] + w1*np.trapz(y,x2) + R*du
+    #Q = (1-w1)*conv[-1] + w1*y[-1] + R*du
     
     if print_vals: 
         print(u,Q)
@@ -109,7 +102,8 @@ x_ub = (D['Tw_ub']-D['Tin'])/D['Tin']
 bnds_seg = [[x_lb,x_ub]]*10
 guess = (x_ub-x_lb)/2*np.ones(10)
 
-w1 = np.linspace(0,1,10)
+#w1 = np.linspace(0,1,30)
+w1 = [0.33] # optima
 
 conv = []
 Tout = []
@@ -125,15 +119,45 @@ for i in range(len(w1)):
     
     conv = np.hstack(([conv,x1[-1]]))
     Tout = np.hstack(([Tout,T[-1]]))
-    print(w1[i])
+    print(f'Weight: {w1[i]}')
     
-# print(conv)
+    print(f'Conversion: {conv[i]}')
 # print(Tout)
 
+# =============================================================================
+# seg = np.linspace(0,D['L'],len(Tw)+1)
+# plt.figure()
+# plt.plot(conv,Tout,'co')
+# plt.xlabel('Conversion [-]')
+# plt.ylabel('Temperature [K]')
+# plt.title('Pareto plot weighted obj fun 2')
+# plt.grid(True)
+# =============================================================================
+uopt = res.x
+
+z, c, T, Tw, x1, x2 = simulation_seg(uopt,D)
+
 seg = np.linspace(0,D['L'],len(Tw)+1)
+
+
 plt.figure()
-plt.plot(conv,Tout,'co')
-plt.xlabel('Conversion [-]')
+plt.subplot(2,1,1)
+plt.title('Concentration profile')
+plt.plot(z,c)
+plt.hlines([D['c_lb'],D['c_ub']], 0, D['L'],linestyle = '--',color = 'red')
+plt.xlabel('Reactor length [m]')
+plt.ylabel('Concentratioon [mol/l]')
+plt.subplot(2,1,2)
+plt.title('Temperature profile')
+plt.plot(z,T)
+plt.stairs(Tw,seg,baseline = None , color = 'orange',label = "Wall temperature")
+plt.hlines([D['T_ub'],D['T_lb']], 0, D['L'],color = 'red',linestyle = "--")
+plt.xlabel('Reactor length [m]')
 plt.ylabel('Temperature [K]')
-plt.title('Pareto plot weighted obj fun 3')
-plt.grid(True)
+#plt.legend(loc='center right')
+
+plt.ylim(260,420)
+plt.tight_layout()
+
+plt.savefig('C:/Users/Magnus/OneDrive - Lund University/Studier/Digitalisering/Projekt 2/Figure_11.png', dpi=300)
+
