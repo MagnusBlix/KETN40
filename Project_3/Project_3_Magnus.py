@@ -27,8 +27,9 @@ plt.close('all')
 
 # Tuning knobs
 n_layers = 2 # Two layers to match model B
-epos = 50
+epos = 500
 grid = 100
+plot_loss = False
 
 # %% Model
 
@@ -38,7 +39,7 @@ def model():
     model.add(Dense(20, input_dim=3, activation='relu'))
     for i in range(n_layers):
         model.add(Dense(10, activation='relu'))
-    model.add(Dense(1, activation='linear'))
+    model.add(Dense(3, activation='linear'))
     
     # Compile model
     model.compile(loss='mean_squared_error', optimizer='adam')
@@ -55,8 +56,11 @@ X0 = np.array([x1, x2, x3]).T
 Y0 = np.array([y_A, y_BC, y_D]).T
 
 # Scale data
-X = StandardScaler().fit_transform(X0)
-Y = StandardScaler().fit_transform(Y0)
+x_scale = StandardScaler()
+X = x_scale.fit_transform(X0)
+
+y_scale = StandardScaler()
+Y = y_scale.fit_transform(Y0)
 
 # Split data into train and test sets
 X_train, X_test, y_train, y_test = train_test_split(X,
@@ -75,21 +79,35 @@ history = model.fit(X_train, y_train,validation_data=(X_test, y_test), epochs=ep
 y_pred = model.predict(X_val).squeeze()
 
 y_pred_A = y_pred[:,0]
+y_pred_BC = y_pred[:,1]
+y_pred_D = y_pred[:,2]
 
+# %% Retention time plotting
+def ret_plot(dv):
+    dv = 2
+    for i in range(dv):
+        i += 1
 
 # %% Plot
+if plot_loss:
+    plt.figure(dpi=200, figsize=(5,4), layout='tight')
+    
+    plt.plot(history.history['loss'], label='loss')
+    plt.xlabel('Number of Epochs')
+    plt.ylabel('Loss value')
+    plt.title('Loss plotted as a function of the number of epochs')
 
-plt.figure(dpi=200, figsize=(5,4), layout='compressed')
+plt.figure(dpi=200, figsize=(5,4), layout='tight')
 
-plt.plot(history.history['loss'], label='loss')
-plt.xlabel('Number of Epochs')
-plt.ylabel('Loss value')
+plt.scatter(y_pred_A, y_val[:,0], label='A')
+plt.scatter(y_pred_BC, y_val[:,1],label='BC')
+plt.scatter(y_pred_D, y_val[:,2],label='D')
+plt.xlabel(r'y$_{pred}$')
+plt.ylabel('$y_{val}$')
+plt.title('Validation plot for model training of retention times')
+plt.legend()
 
-plt.figure(dpi=200, figsize=(5,4), layout='compressed')
 
-# plt.scatter(y_pred, y_val)
-# plt.xlabel(r'y$_{pred}$')
-# plt.ylabel('$y_{val}$')
  
 '''
 Frågor till Daniel & Niklas
