@@ -26,8 +26,8 @@ df = pd.read_csv('chromdataB.csv')
 plt.close('all')
 
 # Tuning knobs
-n_layers = 2 # Two layers to match model B
-epos = 500
+n_layers = 3 # Two layers to match model B
+epos = 800
 grid = 100
 plot_loss = False
 
@@ -84,9 +84,25 @@ y_pred_D = y_pred[:,2]
 
 # %% Retention time plotting
 def ret_plot(dv):
-    dv = 2
-    for i in range(dv):
-        i += 1
+    x2f = np.linspace(0,10)
+    plt.figure(dpi=200, figsize=(5,4), layout='tight')
+    trets0 = []
+    e = 0
+    for i,x2 in enumerate(x2f):        
+        dv0 = np.array([[0, 40, x2]])
+        dv = x_scale.transform(dv0)
+        y = model.predict(dv, verbose=0).squeeze()
+        tret = y_scale.inverse_transform(y.reshape(1,-1))
+        trets0.append(tret)
+        e += 1
+    trets = np.array(trets0).squeeze()
+    labels=['A', 'BC', 'D']
+    for i in range(3):    
+        plt.plot(x2f, trets[:,i], label=labels[i])
+    plt.xlabel('B$_{end}$ [%]')
+    plt.ylabel('t$_{ret}$ [CV]')
+    plt.title('Retention times as a function of buffer ratio')
+    plt.legend()
 
 # %% Plot
 if plot_loss:
@@ -107,7 +123,7 @@ plt.ylabel('$y_{val}$')
 plt.title('Validation plot for model training of retention times')
 plt.legend()
 
-
+ret_plot(x3)
  
 '''
 Frågor till Daniel & Niklas

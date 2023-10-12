@@ -1,0 +1,12 @@
+[workspace]
+restore_data_on_startup = True
+save_data_on_exit = True
+save_history = True
+save_non_project_files = False
+project_type = 'empty-project-type'
+recent_files = ['Project_3_Magnus.py', 'Project3_Lina.py', 'Project_3optLina.py', '..\\..\\..\\..\\OneDrive - Lund University\\Studier\\Digitalisering\\Practice 8\\Problem 3.py', '..\\..\\..\\..\\anaconda3\\Lib\\site-packages\\keras\\src\\backend.py', '..\\..\\..\\..\\anaconda3\\lib\\site-packages\\sklearn\\utils\\validation.py', '..\\..\\..\\..\\anaconda3\\lib\\site-packages\\sklearn\\preprocessing\\_data.py', '..\\..\\..\\..\\anaconda3\\lib\\site-packages\\tensorflow\\python\\eager\\execute.py', '..\\..\\..\\..\\anaconda3\\lib\\site-packages\\tensorflow\\core\\function\\polymorphism\\type_dispatch.py', '..\\..\\..\\..\\anaconda3\\lib\\site-packages\\tensorflow\\core\\function\\polymorphism\\function_cache.py']
+
+[main]
+version = 0.2.0
+recent_files = []
+
