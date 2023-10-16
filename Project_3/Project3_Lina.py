@@ -25,8 +25,8 @@ df = pd.read_csv('chromdataA.csv') # Only grad
 plt.close('all')
 
 # Tuning knobs
-n_layers = 2 # Two layers to match model B
-epos = 1000
+n_layers = 3 # Two layers to match model B
+epos = 2000
 grid = 100
 
 # %% Model
@@ -37,7 +37,7 @@ def model():
     model.add(Dense(20, input_dim=3, activation='relu'))
     for i in range(n_layers):
         model.add(Dense(10, activation='relu'))
-    model.add(Dense(3, activation='linear'))
+    model.add(Dense(2, activation='linear'))
     
     # Compile model
     model.compile(loss='mean_squared_error', optimizer='adam')
@@ -52,12 +52,14 @@ y3 = np.array(df['Purity [%]'])
 
 X0 = np.array([x1, x2, x3]).T
 
-Y0 = np.array([y1,y2,y3]).T
+Y0 = np.array([y1,y2]).T
 
 # Create scaler, only for x since y is binary
-X = StandardScaler().fit_transform(X0)
+x_scaler = StandardScaler()
+y_scaler = StandardScaler()
 
-Y = StandardScaler().fit_transform(Y0)
+X = x_scaler.fit_transform(X0)
+Y = y_scaler.fit_transform(Y0)
 
 # Split the data into train and test set
 X_train, X_test, y_train, y_test = train_test_split(X,
@@ -76,10 +78,10 @@ y_pred = model.predict(X_val).squeeze()
 
 yld_pred= y_pred[:,0]
 prod_pred = y_pred[:,1]
-pur_pred = y_pred[:,2]
+
 yld_val = y_val[:,0]
 prod_val = y_val[:,1]
-pur_val = y_val[:,2]
+
 
 # %% Plot
 
@@ -90,6 +92,7 @@ plt.xlabel('Number of Epochs')
 plt.ylabel('Loss value')
 
 plt.figure()
+plt.title('Validation plot')
 plt.subplot(2,1,1)
 plt.title('yield')
 plt.scatter(yld_pred, yld_val)
@@ -98,11 +101,6 @@ plt.ylabel('validation')
 plt.subplot(2,1,2)
 plt.title('productivity')
 plt.scatter(prod_pred,prod_val)
-plt.xlabel('prediction')
-plt.ylabel('validation')
-plt.figure()
-plt.title('product purity')
-plt.scatter(pur_pred,pur_val)
 plt.xlabel('prediction')
 plt.ylabel('validation')
 
