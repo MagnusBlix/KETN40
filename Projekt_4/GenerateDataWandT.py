@@ -61,10 +61,11 @@ def getpeakmax(x, y, plotFlag=False):
 
 def get_random_y_values(tret_min, tret_max, h_min, h_max, num_samples):
     data = []
-    x = np.linspace(0, 20, 20)
+    x = np.linspace(0, 50, 100)
 
     for _ in range(num_samples):
-        w = 1
+        # w = 1
+        w = np.random.uniform(0.25, 15)
         tret = np.random.uniform(tret_min, tret_max)
         h = np.random.uniform(h_min, h_max)
         a = 1
@@ -78,8 +79,8 @@ def save_to_csv(filename, data):
         writer = csv.writer(file)
         num_y_values = len(data[0][1])
         writer.writerow(["i", "tret", "h", "w", "a"] + [f"y_{i}" for i in range(1, num_y_values + 1)] )
-        for i, (x, y, g, h, w, a) in enumerate(data, start=1):
-            writer.writerow([i, g, h, w, a]+list(y))
+        for i, (x, y, tret, h, w, a) in enumerate(data, start=1):
+            writer.writerow([i, tret, h, w, a]+list(y))
 
 def main():
     num_samples = 300  # Number of random samples to generate

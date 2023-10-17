@@ -26,7 +26,7 @@ plt.close('all')
 
 # Tuning knobs
 n_layers = 4 # Two layers to match model B
-epos = 2000
+epos = 60
 grid = 100
 
 # %% Model
@@ -34,22 +34,22 @@ grid = 100
 def model():
     # create model
     model = Sequential()
-    model.add(Dense(30, input_dim=2, activation='relu'))
+    model.add(Dense(30, input_dim=3, activation='relu'))
     for i in range(n_layers):
         model.add(Dense(20, activation='relu'))
-    model.add(Dense(20, activation='linear'))
+    model.add(Dense(100, activation='linear'))
     
     # Compile model
     model.compile(loss='mean_squared_error', optimizer='adam')
     return model
 
-x1 =  df.iloc[:, 0].values 
+x1 = df.iloc[:, 1].values  # tret
 x2 = np.array(df['h'])
 x3 = np.array(df['w'])
 y =  df.iloc[:, 5:].values 
 
 
-X0 = np.array([x1,x2]).T
+X0 = np.array([x1,x2, x3]).T
 
 Y0 = y
 
@@ -73,12 +73,10 @@ history = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=e
 
 y_pred = model.predict(X_val).squeeze()
 
-
-
-
 # yld_val = y_val[:,0]
 # prod_val = y_val[:,1]
 
+model.save('curve_model.h5')
 
 # %% Plot
 
@@ -100,9 +98,7 @@ plt.ylabel('validation')
 
 # plt.tight_layout()
  
-# '''
-# Frågor till Daniel & Niklas
+'''
+Frågor till Daniel & Niklas
 
-#  - Ska vi använda model().predict för att kolla på våra rackare?
-#  - Minimize..
-# '''
+'''
