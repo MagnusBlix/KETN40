@@ -26,7 +26,7 @@ plt.close('all')
 
 # Tuning knobs
 n_layers = 4 # Two layers to match model B
-epos = 60
+epos = 500
 grid = 100
 
 # %% Model
@@ -34,9 +34,9 @@ grid = 100
 def model():
     # create model
     model = Sequential()
-    model.add(Dense(30, input_dim=3, activation='relu'))
+    model.add(Dense(20, input_dim=3, activation='relu'))
     for i in range(n_layers):
-        model.add(Dense(20, activation='relu'))
+        model.add(Dense(30, activation='relu'))
     model.add(Dense(100, activation='linear'))
     
     # Compile model
@@ -82,11 +82,12 @@ model.save('curve_model.h5')
 
 plt.figure()
 
-plt.plot(history.history['loss'], label='loss')
-plt.plot(history.history['val_loss'],label = 'val loss')
+plt.plot(np.log(history.history['loss']), label='loss')
+plt.plot(np.log(history.history['val_loss']),label = 'val loss')
 plt.xlabel('Number of Epochs')
 plt.ylabel('Loss value')
 plt.legend()
+
 
 
 plt.figure()
