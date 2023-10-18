@@ -15,9 +15,13 @@ from keras.models import load_model
 model = load_model('curve_model.h5')
 
 
-x_vals = np.linspace(0, 50, 100)
-X_val = x_vals.reshape(-1, 3)  # Reshape X_val to be a 2D array with a single feature
+X_val = np.array([10, 3, 2])
+X_val = X_val.reshape(1, -1)  # Reshape X_val to be a 2D array with a single feature
+
+x_axis = np.linspace(1, 500, 100)
+x_axis = x_axis.reshape(1, -1)
 
 y_vals = model.predict(X_val)
 
-plt.plot(X_val, y_vals)
+plt.figure()
+plt.scatter(x_axis, y_vals)
