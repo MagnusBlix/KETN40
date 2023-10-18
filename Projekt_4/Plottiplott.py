@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Created on Wed Oct 18 13:41:19 2023
+
+@author: linaelmanira
+"""
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
 Created on Mon Oct 16 14:44:17 2023
 
 @author: linaelmanira
@@ -94,7 +102,3 @@ plt.title('Validation plot')
 plt.scatter(y_pred, y_val)
 plt.xlabel('prediction')
 plt.ylabel('validation')
-
-
-# plt.tight_layout()
- 

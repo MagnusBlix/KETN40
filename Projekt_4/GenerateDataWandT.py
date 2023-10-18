@@ -69,7 +69,7 @@ def get_random_y_values(tret_min, tret_max, h_min, h_max, num_samples):
         tret = np.random.uniform(tret_min, tret_max)
         h = np.random.uniform(h_min, h_max)
         a = 1
-        y = w*np.exp((-(x-tret)**2)/(2*w**2))
+        y = h*np.exp((-(x-tret)**2)/(2*w**2))
         data.append((x, y, tret, h, w, a))
 
     return data
